@@ -11,9 +11,6 @@ import java.util.Random;
 import static io.restassured.RestAssured.given;
 
 public class BaseTest {
-    protected String TOKEN = "";
-    protected String BASE_URI = "https://api.anhtester.com/api";
-
 
     protected int generateRandomNumber() {
         return new Random().nextInt(9999);
@@ -27,12 +24,12 @@ public class BaseTest {
         String loginBody = objectMapper.writeValueAsString(login);
 
         RequestSpecification request = given();
-        request.baseUri(BASE_URI).header("accept","application/json").contentType("application/json").body(loginBody);
+        request.baseUri(GlobalConstants.BASE_URI).header("accept","application/json").contentType("application/json").body(loginBody);
 
         Response response = request.when().post("/login");
         response.then().statusCode(200);
 
-        this.TOKEN = response.jsonPath().getString("token");
+        GlobalConstants.TOKEN = response.jsonPath().getString("token");
     }
 
     protected RequestSpecification getPreSetupRequest(String baseUri) {

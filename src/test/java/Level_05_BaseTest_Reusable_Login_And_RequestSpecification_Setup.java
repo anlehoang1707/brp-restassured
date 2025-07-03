@@ -1,3 +1,4 @@
+import brp.commons.GlobalConstants;
 import brp.model.NewUserPOJO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -33,7 +34,7 @@ public class Level_05_BaseTest_Reusable_Login_And_RequestSpecification_Setup ext
 
     @Test
     public void TC_01_Verify_GET_Method() {
-        Response response = getPreSetupRequest(BASE_URI).when().get("/users");
+        Response response = getPreSetupRequest(GlobalConstants.BASE_URI).when().get("/users");
         response.then().statusCode(200);
         response.then().body("response[1].firstName",equalTo("John"));
     }
@@ -44,7 +45,7 @@ public class Level_05_BaseTest_Reusable_Login_And_RequestSpecification_Setup ext
         ObjectMapper objectMapper = new ObjectMapper();
         String newUserBody = objectMapper.writeValueAsString(newUser);
 
-        Response response = getPreSetupRequest(BASE_URI,TOKEN).body(newUserBody).when().post("/user");
+        Response response = getPreSetupRequest(GlobalConstants.BASE_URI,GlobalConstants.TOKEN).body(newUserBody).when().post("/user");
 
         response.prettyPrint();
     }
@@ -56,7 +57,7 @@ public class Level_05_BaseTest_Reusable_Login_And_RequestSpecification_Setup ext
 
     @Test
     public void TC_04_Verify_DELETE_Method() {
-        Response response = getPreSetupRequest(BASE_URI,TOKEN).queryParam("username",newUser.getUsername()).when().delete("/user");
+        Response response = getPreSetupRequest(GlobalConstants.BASE_URI,GlobalConstants.TOKEN).queryParam("username",newUser.getUsername()).when().delete("/user");
         response.prettyPrint();
         response.then().statusCode(200);
         response.then().body("message",equalTo("Success"));
