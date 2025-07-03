@@ -7,7 +7,7 @@ import org.testng.annotations.Test;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 
-public class Level_01_Use_RestAssured_In_TestClass {
+public class Level_01_RestAssured_In_TestClass {
     RequestSpecification request;
 
 
