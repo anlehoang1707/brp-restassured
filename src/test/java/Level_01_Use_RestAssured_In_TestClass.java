@@ -4,11 +4,10 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import static io.restassured.RestAssured.baseURI;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 
-public class Level_01_Use_RestAssured_In_Test_Case {
+public class Level_01_Use_RestAssured_In_TestClass {
     RequestSpecification request;
 
 
