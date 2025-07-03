@@ -5,6 +5,7 @@ import brp.commons.BaseTest;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -17,7 +18,7 @@ public class Level_05_BaseTest_Reusable_Login_And_RequestSpecification_Setup ext
     final String baseUri = "https://api.anhtester.com/api";
     NewUserPOJO newUser = new NewUserPOJO();
 
-    @BeforeMethod
+    @BeforeClass
     public void beforeMethod() throws JsonProcessingException {
         login();
 
@@ -55,6 +56,11 @@ public class Level_05_BaseTest_Reusable_Login_And_RequestSpecification_Setup ext
 
     @Test
     public void TC_04_Verify_DELETE_Method() {
+        Response response = getPreSetupRequest(BASE_URI,TOKEN).queryParam("username",newUser.getUsername()).when().delete("/user");
+        response.prettyPrint();
+        response.then().statusCode(200);
+        response.then().body("message",equalTo("Success"));
+
 
     }
 
