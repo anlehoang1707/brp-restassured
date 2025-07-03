@@ -1,3 +1,5 @@
+package brp.model;
+
 import lombok.Data;
 
 @Data

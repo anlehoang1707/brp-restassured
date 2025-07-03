@@ -1,17 +1,17 @@
+import brp.model.NewUserPOJO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import commons.BaseTest;
+import brp.commons.BaseTest;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 
-public class Level_04_Refactor_Level_03_With_POJO extends BaseTest {
+public class Level_05_BaseTest_Reusable_Login_And_RequestSpecification_Setup extends BaseTest {
     RequestSpecification request;
     String token;
     final String baseUri = "https://api.anhtester.com/api";
@@ -19,19 +19,7 @@ public class Level_04_Refactor_Level_03_With_POJO extends BaseTest {
 
     @BeforeMethod
     public void beforeMethod() throws JsonProcessingException {
-        LoginPOJO login = new LoginPOJO();
-        login.setUsername("anhtester");
-        login.setPassword("Demo@123");
-        ObjectMapper objectMapper = new ObjectMapper();
-        String loginBody = objectMapper.writeValueAsString(login);
-
-        request = given();
-        request.baseUri(baseUri).header("accept","application/json").contentType("application/json").body(loginBody);
-
-        Response response = request.when().post("/login");
-        response.prettyPrint();
-        response.then().statusCode(200);
-        token = response.jsonPath().getString("token");
+        login();
 
         newUser.setUsername("anle" + generateRandomNumber());
         newUser.setEmail("anle" + generateRandomNumber() + "@gmail.com");
@@ -44,7 +32,7 @@ public class Level_04_Refactor_Level_03_With_POJO extends BaseTest {
 
     @Test
     public void TC_01_Verify_GET_Method() {
-        Response response = request.when().get("/users");
+        Response response = getPreSetupRequest(BASE_URI).when().get("/users");
         response.then().statusCode(200);
         response.then().body("response[1].firstName",equalTo("John"));
     }
@@ -52,16 +40,11 @@ public class Level_04_Refactor_Level_03_With_POJO extends BaseTest {
     @Test
     public void TC_02_Verify_POST_Method() throws JsonProcessingException {
 
-
         ObjectMapper objectMapper = new ObjectMapper();
         String newUserBody = objectMapper.writeValueAsString(newUser);
-        RequestSpecification request = given();
-        request.baseUri(baseUri).contentType("application/json");
-        request.header("Accept", "application/json")
-                .header("Content-Type", "application/json")
-                .header("Authorization","Bearer "+ token);
-        request.body(newUserBody);
-        Response response = request.when().post("/user");
+
+        Response response = getPreSetupRequest(BASE_URI,TOKEN).body(newUserBody).when().post("/user");
+
         response.prettyPrint();
     }
 
