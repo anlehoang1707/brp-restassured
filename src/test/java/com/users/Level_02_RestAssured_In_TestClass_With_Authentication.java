@@ -1,6 +1,5 @@
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import brp.model.LoginPOJO;
+package com.users;
+
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import org.testng.annotations.AfterMethod;
@@ -8,27 +7,27 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.*;
 
-public class Level_03_RestAssured_In_TestClass_With_Authentication_JsonPath_POJO_Lombok {
+public class Level_02_RestAssured_In_TestClass_With_Authentication {
     RequestSpecification request;
 
     @BeforeClass
-    public void beforeMethod() throws JsonProcessingException {
-        LoginPOJO login = new LoginPOJO();
-        login.setUsername("anhtester");
-        login.setPassword("Demo@123");
-        ObjectMapper objectMapper = new ObjectMapper();
-        String loginBody = objectMapper.writeValueAsString(login);
-
+    public void beforeMethod() {
         request = given();
-        request.baseUri("https://api.anhtester.com/api").header("accept","application/json").contentType("application/json").body(loginBody);
+        request.baseUri("https://api.anhtester.com/api").header("accept","application/json").contentType("application/json");
+
+        request.body("""
+                {
+                  "username": "anhtester",
+                  "password": "Demo@123"
+                }""");
 
         Response response = request.when().post("/login");
         response.prettyPrint();
         response.then().statusCode(200);
-
-        String token = response.jsonPath().getString("token");
+        response.then().body(containsString("token"));
+        String token = response.getBody().asString().split(":")[1].replace("/","").replace("}","").trim();
         System.out.println(token);
     }
 
