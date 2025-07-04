@@ -5,12 +5,37 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
+import org.testng.annotations.BeforeSuite;
 
+import java.io.File;
 import java.util.Random;
 
 import static io.restassured.RestAssured.given;
 
 public class BaseTest {
+    @BeforeSuite
+    public void deleteFileInReport() {
+        // Remove all file in Allure attachment (json file)
+        deleteAllFileInFolder("allure-results");
+    }
+
+    public void deleteAllFileInFolder(String folderName) {
+        try {
+            String pathFolderDownload = GlobalConstants.PROJECT_PATH + File.separator + folderName;
+            File file = new File(pathFolderDownload);
+            File[] listOfFiles = file.listFiles();
+            if (listOfFiles.length != 0) {
+                for (int i = 0; i < listOfFiles.length; i++) {
+                    if (listOfFiles[i].isFile() && !listOfFiles[i].getName().equals("environment.properties")) {
+                        new File(listOfFiles[i].toString()).delete();
+                    }
+                }
+            }
+        } catch (Exception e) {
+            System.out.print(e.getMessage());
+        }
+    }
+
 
     protected int generateRandomNumber() {
         return new Random().nextInt(9999);
