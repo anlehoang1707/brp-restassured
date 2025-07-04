@@ -1,4 +1,4 @@
-package com.users;
+package brp.users;
 
 import brp.model.NewUserPOJO;
 import com.fasterxml.jackson.core.JsonProcessingException;

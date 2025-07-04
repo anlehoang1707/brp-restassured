@@ -1,4 +1,4 @@
-package com.users;
+package brp.users;
 
 import brp.commons.ApiKeyword;
 import brp.commons.BaseTest;

@@ -1,44 +1,45 @@
-package com.users;
+package brp.users;
 
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.*;
 
-public class Level_01_RestAssured_In_TestClass {
+public class Level_02_RestAssured_In_TestClass_With_Authentication {
     RequestSpecification request;
 
-
-    @BeforeMethod
+    @BeforeClass
     public void beforeMethod() {
         request = given();
-        request.baseUri("https://api.anhtester.com/api").basePath("/users").header("accept","application/json");
+        request.baseUri("https://api.anhtester.com/api").header("accept","application/json").contentType("application/json");
 
+        request.body("""
+                {
+                  "username": "anhtester",
+                  "password": "Demo@123"
+                }""");
+
+        Response response = request.when().post("/login");
+        response.prettyPrint();
+        response.then().statusCode(200);
+        response.then().body(containsString("token"));
+        String token = response.getBody().asString().split(":")[1].replace("/","").replace("}","").trim();
+        System.out.println(token);
     }
 
     @Test
     public void TC_01_Verify_GET_Method() {
-        Response response = request.when().get();
-        response.prettyPeek();
+        Response response = request.when().get("/users");
         response.then().statusCode(200);
         response.then().body("response[1].firstName",equalTo("John"));
     }
 
     @Test
     public void TC_02_Verify_POST_Method() {
-//        request.body("{\n" +
-//                "  \"username\": \"theUser\",\n" +
-//                "  \"firstName\": \"John\",\n" +
-//                "  \"lastName\": \"James\",\n" +
-//                "  \"email\": \"john@email.com\",\n" +
-//                "  \"password\": \"Demo@123\",\n" +
-//                "  \"phone\": \"0912345678\",\n" +
-//                "  \"userStatus\": 1\n" +
-//                "}").contentType("application/json");
 //        Response response = request.when().post();
 //        response.prettyPrint();
 //        response.then().statusCode(200);
@@ -58,6 +59,6 @@ public class Level_01_RestAssured_In_TestClass {
 
     @AfterMethod
     public void afterMethod() {
-
+        System.out.println("TBD After Method");
     }
 }
