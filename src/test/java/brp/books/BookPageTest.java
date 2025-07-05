@@ -14,7 +14,8 @@ public class BookPageTest extends BaseTest {
     }
 
     @Test
-    public void TC_01_Book_Get_All_With_Pagination() {}
+    public void TC_01_Book_Get_All_With_Pagination() {
+    }
 
     @Test
     public void TC_02_Book_Get_By_Id() {}

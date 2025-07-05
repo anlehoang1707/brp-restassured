@@ -1,8 +1,10 @@
 package brp.commons;
 
 import brp.model.LoginPOJO;
+import brp.utils.LogUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.qameta.allure.Step;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import org.testng.annotations.BeforeSuite;
@@ -41,9 +43,11 @@ public class BaseTest {
         return new Random().nextInt(9999);
     }
 
+    @Step("Convert Pojo to Json String for {0}")
     protected String convertPojoToJsonString(Object object)  {
         ObjectMapper objectMapper = new ObjectMapper();
         try{
+            LogUtils.info("Convert Pojo to Json String for:" + object);
             return objectMapper.writeValueAsString(object);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);

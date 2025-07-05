@@ -117,6 +117,14 @@ public class ApiKeyword {
         return response;
     }
 
+    @Step("DELETE request to {0}")
+    public static Response delete(String path) {
+        LogUtils.info("DELETE request to " + path);
+        Response response = given(SpecBuilder.getRequestSpecBuilder()).when().delete(path).then().extract().response();
+        LogUtils.info("Response: " + response.prettyPrint());
+        return response;
+    }
+
     @Step("DELETE request to {0} with query param {1}={2}")
     public static Response deleteWithQuery(String path, String paramName, String paramValue) {
         LogUtils.info("DELETE request to " + path + " with query param: " + paramName + "=" + paramValue);

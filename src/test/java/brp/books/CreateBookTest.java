@@ -11,12 +11,12 @@ import org.testng.annotations.*;
 
 public class CreateBookTest extends BaseTest {
     NewBookPOJO newBookPOJO;
-    String bookName = "anletest" + Integer.toString(generateRandomNumber());
+    String bookName;
 
     @BeforeMethod
     public void beforeMethod() throws JsonProcessingException {
         login();
-
+        bookName = "anletest" + Integer.toString(generateRandomNumber());
         newBookPOJO = new NewBookPOJO();
         newBookPOJO.setName(bookName);
         newBookPOJO.setCategoryId(119);
@@ -29,8 +29,7 @@ public class CreateBookTest extends BaseTest {
     
     @Test
     public void TC_01_Create_Valid_New_Book() {
-//        ObjectMapper objectMapper = new ObjectMapper();
-//        String newBookBody = objectMapper.writeValueAsString(newBookPOJO);
+
         String newBookBody = convertPojoToJsonString(newBookPOJO);
         Response response = ApiKeyword.post(ApiEndPoint.POST_BOOK.getPathString(), newBookBody);
 
@@ -44,8 +43,8 @@ public class CreateBookTest extends BaseTest {
         String newBookBodyWithMissingTitle = convertPojoToJsonString(newBookPOJO);
         Response response = ApiKeyword.post(ApiEndPoint.POST_BOOK.getPathString(), newBookBodyWithMissingTitle);
 
-        Assert.assertEquals(response.statusCode(), 422);
-        Assert.assertTrue(response.jsonPath().getString("message").contains("field is required"));
+        Assert.assertEquals(ApiKeyword.getStatusCode(response), 422);
+        Assert.assertTrue(ApiKeyword.getResponseKeyValue(response,"message").contains("field is required"));
 
     }
 
@@ -54,12 +53,10 @@ public class CreateBookTest extends BaseTest {
         String newBookBody = convertPojoToJsonString(newBookPOJO);
         Response response = ApiKeyword.post(ApiEndPoint.POST_BOOK.getPathString(), newBookBody);
 
-        newBookPOJO.setName(bookName);
-        String newBookBodyWithDuplicateName = convertPojoToJsonString(newBookPOJO);
-        Response errorResponse = ApiKeyword.post(ApiEndPoint.POST_BOOK.getPathString(), newBookBodyWithDuplicateName);
+        Response errorResponse = ApiKeyword.post(ApiEndPoint.POST_BOOK.getPathString(), newBookPOJO);
 
-        Assert.assertEquals(errorResponse.statusCode(), 422);
-        Assert.assertEquals(response.jsonPath().getString("message"),"The name has already been taken.");
+        Assert.assertEquals(ApiKeyword.getStatusCode(errorResponse), 422);
+        Assert.assertEquals(ApiKeyword.getResponseKeyValue(errorResponse,"message"),"The name has already been taken.");
 
     }
 
@@ -69,13 +66,13 @@ public class CreateBookTest extends BaseTest {
         String newBookBodyWithInvalidCategoryId = convertPojoToJsonString(newBookPOJO);
         Response errorResponse = ApiKeyword.post(ApiEndPoint.POST_BOOK.getPathString(), newBookBodyWithInvalidCategoryId);
 
-        Assert.assertEquals(errorResponse.statusCode(), 422);
-        Assert.assertTrue(errorResponse.jsonPath().getString("errors").contains("The selected category id is invalid."));
+        Assert.assertEquals(ApiKeyword.getStatusCode(errorResponse), 422);
+        Assert.assertTrue(ApiKeyword.getResponseKeyValue(errorResponse,"errors.category_id").contains("The selected category id is invalid."));
 
     }
 
     @AfterMethod
-    public void afterClass() {
+    public void afterMethod() {
 
     }
 }
