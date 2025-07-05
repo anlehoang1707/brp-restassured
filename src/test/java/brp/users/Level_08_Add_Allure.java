@@ -2,7 +2,7 @@ package brp.users;
 
 import brp.commons.ApiKeyword;
 import brp.commons.BaseTest;
-import brp.model.NewUserPOJO;
+import brp.model.users.NewUserPOJO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.response.Response;

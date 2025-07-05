@@ -41,6 +41,15 @@ public class BaseTest {
         return new Random().nextInt(9999);
     }
 
+    protected String convertPojoToJsonString(Object object)  {
+        ObjectMapper objectMapper = new ObjectMapper();
+        try{
+            return objectMapper.writeValueAsString(object);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     protected void login() throws JsonProcessingException {
         LoginPOJO login = new LoginPOJO();
         login.setUsername("anhtester");

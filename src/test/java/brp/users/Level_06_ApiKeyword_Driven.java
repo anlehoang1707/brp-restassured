@@ -2,8 +2,7 @@ package brp.users;
 
 import brp.commons.ApiKeyword;
 import brp.commons.BaseTest;
-import brp.commons.GlobalConstants;
-import brp.model.NewUserPOJO;
+import brp.model.users.NewUserPOJO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.response.Response;
@@ -12,11 +11,6 @@ import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-
-import java.util.HashMap;
-import java.util.Map;
-
-import static org.hamcrest.Matchers.equalTo;
 
 public class Level_06_ApiKeyword_Driven extends BaseTest {
     RequestSpecification request;
