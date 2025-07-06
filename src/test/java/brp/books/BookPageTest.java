@@ -1,7 +1,12 @@
 package brp.books;
 
+import brp.commons.ApiEndPoint;
+import brp.commons.ApiKeyword;
 import brp.commons.BaseTest;
+import brp.helpers.TestDataHelper;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import io.restassured.response.Response;
+import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -14,20 +19,20 @@ public class BookPageTest extends BaseTest {
     }
 
     @Test
-    public void TC_01_Book_Get_All_With_Pagination() {
+    public void TC_01_Book_Get_All_WithOut_Pagination() {
+        Response response = ApiKeyword.get(ApiEndPoint.GET_ALL_BOOKS.getPathString());
+        Assert.assertEquals(ApiKeyword.getStatusCode(response),200);
+        Assert.assertEquals(ApiKeyword.getResponseKeyValue(response,"message"),"Success");
     }
 
     @Test
-    public void TC_02_Book_Get_By_Id() {}
+    public void TC_02_Book_Get_By_Id() {
+        int validBookId = TestDataHelper.getValidBookId();
+        Response response = ApiKeyword.get(ApiEndPoint.GET_BOOK_BY_ID.getPathString(String.valueOf(validBookId)));
+        Assert.assertEquals(ApiKeyword.getStatusCode(response),200);
+        Assert.assertEquals(ApiKeyword.getResponseKeyValueInt(response,"response.id"),validBookId);
 
-    @Test
-    public void TC_03_Book_Search_By_Title() {}
-
-    @Test
-    public void TC_04_Book_Filter_By_Category() {}
-
-    @Test
-    public void TC_05_Book_Sort_By_Release_Date() {}
+    }
 
     @AfterClass
     public void afterClass() {

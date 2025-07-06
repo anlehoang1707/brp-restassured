@@ -54,6 +54,11 @@ public class BaseTest {
         }
     }
 
+    protected  String getRandomName() {
+        int randomNumber = new Random().nextInt(9999);
+        return "anle" + String.valueOf(randomNumber);
+    }
+
     protected void login() throws JsonProcessingException {
         LoginPOJO login = new LoginPOJO();
         login.setUsername("anhtester");

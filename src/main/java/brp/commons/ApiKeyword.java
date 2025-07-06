@@ -9,6 +9,7 @@ import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import org.apache.commons.logging.Log;
 
+import java.util.List;
 import java.util.Map;
 
 import static io.restassured.RestAssured.given;
@@ -163,6 +164,20 @@ public class ApiKeyword {
     public static String getResponseKeyValue(Response response, String responseKey) {
         LogUtils.info("Extracting response key: " + responseKey);
         return response.jsonPath().get(responseKey).toString();
+//        return response.getBody().path(responseKey);
+    }
+
+    @Step("Extracting response key {1} from response {0}")
+    public static int getResponseKeyValueInt(Response response, String responseKey) {
+        LogUtils.info("Extracting response key: " + responseKey);
+        return response.jsonPath().getInt(responseKey);
+//        return response.getBody().path(responseKey);
+    }
+
+    @Step("Extracting response key {1} from response {0}")
+    public static List<Integer> getResponseKeyValueListInt(Response response, String responseKey) {
+        LogUtils.info("Extracting response key: " + responseKey);
+        return response.jsonPath().getList(responseKey,Integer.class);
 //        return response.getBody().path(responseKey);
     }
 

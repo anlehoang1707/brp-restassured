@@ -47,10 +47,17 @@ public class DeleteBookTest extends BaseTest {
     }
 
     @Test
-    public void TC_02_Book_Delete_Nonexistent_Returns_404() {}
+    public void TC_02_Book_Delete_Nonexistent_Returns_404() {
+        Response response = ApiKeyword.delete(ApiEndPoint.DELETE_BOOK_BY_ID.getPathString(500000));
+
+        Assert.assertEquals(ApiKeyword.getStatusCode(response),400);
+        Assert.assertEquals(ApiKeyword.getResponseKeyValue(response,"message"),"Not found");
+        Assert.assertEquals(ApiKeyword.getResponseKeyValue(response,"errors"),"No book found with the submitted id");
+    }
+
 
     @AfterClass
     public void afterClass() {
-        // Implement any cleanup logic if necessary
-    }
+        Response response = ApiKeyword.delete(ApiEndPoint.DELETE_BOOK_BY_ID.getPathString(bookId));    }
+
 }

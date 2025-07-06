@@ -12,6 +12,8 @@ import org.testng.annotations.*;
 public class CreateBookTest extends BaseTest {
     NewBookPOJO newBookPOJO;
     String bookName;
+    int bookId;
+    Response response;
 
     @BeforeMethod
     public void beforeMethod() throws JsonProcessingException {
@@ -28,23 +30,26 @@ public class CreateBookTest extends BaseTest {
     }
     
     @Test
-    public void TC_01_Create_Valid_New_Book() {
+    public void TC_01_Book_Create_Valid_New_Book() {
 
         String newBookBody = convertPojoToJsonString(newBookPOJO);
         Response response = ApiKeyword.post(ApiEndPoint.POST_BOOK.getPathString(), newBookBody);
 
         Assert.assertEquals(response.statusCode(), 200);
         Assert.assertEquals(response.jsonPath().getString("message"), "Success");
+
+        this.bookId = Integer.parseInt(ApiKeyword.getResponseKeyValue(response,"response.id"));
+
     }
 
     @Test
     public void TC_02_Book_Create_With_Missing_Book_Name() {
         newBookPOJO.setName("");
         String newBookBodyWithMissingTitle = convertPojoToJsonString(newBookPOJO);
-        Response response = ApiKeyword.post(ApiEndPoint.POST_BOOK.getPathString(), newBookBodyWithMissingTitle);
+        Response errorResponse = ApiKeyword.post(ApiEndPoint.POST_BOOK.getPathString(), newBookBodyWithMissingTitle);
 
-        Assert.assertEquals(ApiKeyword.getStatusCode(response), 422);
-        Assert.assertTrue(ApiKeyword.getResponseKeyValue(response,"message").contains("field is required"));
+        Assert.assertEquals(ApiKeyword.getStatusCode(errorResponse), 422);
+        Assert.assertTrue(ApiKeyword.getResponseKeyValue(errorResponse,"message").contains("field is required"));
 
     }
 
@@ -58,6 +63,7 @@ public class CreateBookTest extends BaseTest {
         Assert.assertEquals(ApiKeyword.getStatusCode(errorResponse), 422);
         Assert.assertEquals(ApiKeyword.getResponseKeyValue(errorResponse,"message"),"The name has already been taken.");
 
+        this.bookId = Integer.parseInt(ApiKeyword.getResponseKeyValue(response,"response.id"));
     }
 
     @Test
@@ -73,6 +79,8 @@ public class CreateBookTest extends BaseTest {
 
     @AfterMethod
     public void afterMethod() {
-
+        if (bookId != 0) {
+          ApiKeyword.delete(ApiEndPoint.DELETE_BOOK_BY_ID.getPathString(bookId));
+        }
     }
 }
