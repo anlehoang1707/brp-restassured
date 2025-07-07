@@ -1,9 +1,9 @@
-package brp.books;
+package brp.book;
 
 import brp.commons.ApiEndPoint;
 import brp.commons.ApiKeyword;
 import brp.commons.BaseTest;
-import brp.model.books.NewBookPOJO;
+import brp.model.book.NewBookPOJO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.restassured.response.Response;
 import org.testng.Assert;
@@ -18,17 +18,17 @@ public class CreateBookTest extends BaseTest {
     @BeforeMethod
     public void beforeMethod() throws JsonProcessingException {
         login();
-        bookName = "anletest" + Integer.toString(generateRandomNumber());
+        bookName = "An Le Test Book" + Integer.toString(generateRandomNumber());
         newBookPOJO = new NewBookPOJO();
         newBookPOJO.setName(bookName);
         newBookPOJO.setCategoryId(119);
         newBookPOJO.setPrice(1200);
         newBookPOJO.setReleaseDate("2023/12/29");
-        newBookPOJO.setImageIds(new int[] {11,12});
+        newBookPOJO.setImageIds(new int[]{11, 12});
         newBookPOJO.setStatus(true);
 
     }
-    
+
     @Test
     public void TC_01_Book_Create_Valid_New_Book() {
 
@@ -38,7 +38,7 @@ public class CreateBookTest extends BaseTest {
         Assert.assertEquals(response.statusCode(), 200);
         Assert.assertEquals(response.jsonPath().getString("message"), "Success");
 
-        this.bookId = Integer.parseInt(ApiKeyword.getResponseKeyValue(response,"response.id"));
+        this.bookId = Integer.parseInt(ApiKeyword.getResponseKeyValue(response, "response.id"));
 
     }
 
@@ -49,7 +49,7 @@ public class CreateBookTest extends BaseTest {
         Response errorResponse = ApiKeyword.post(ApiEndPoint.POST_BOOK.getPathString(), newBookBodyWithMissingTitle);
 
         Assert.assertEquals(ApiKeyword.getStatusCode(errorResponse), 422);
-        Assert.assertTrue(ApiKeyword.getResponseKeyValue(errorResponse,"message").contains("field is required"));
+        Assert.assertTrue(ApiKeyword.getResponseKeyValue(errorResponse, "message").contains("field is required"));
 
     }
 
@@ -61,9 +61,9 @@ public class CreateBookTest extends BaseTest {
         Response errorResponse = ApiKeyword.post(ApiEndPoint.POST_BOOK.getPathString(), newBookPOJO);
 
         Assert.assertEquals(ApiKeyword.getStatusCode(errorResponse), 422);
-        Assert.assertEquals(ApiKeyword.getResponseKeyValue(errorResponse,"message"),"The name has already been taken.");
+        Assert.assertEquals(ApiKeyword.getResponseKeyValue(errorResponse, "message"), "The name has already been taken.");
 
-        this.bookId = Integer.parseInt(ApiKeyword.getResponseKeyValue(response,"response.id"));
+        this.bookId = Integer.parseInt(ApiKeyword.getResponseKeyValue(response, "response.id"));
     }
 
     @Test
@@ -73,14 +73,14 @@ public class CreateBookTest extends BaseTest {
         Response errorResponse = ApiKeyword.post(ApiEndPoint.POST_BOOK.getPathString(), newBookBodyWithInvalidCategoryId);
 
         Assert.assertEquals(ApiKeyword.getStatusCode(errorResponse), 422);
-        Assert.assertTrue(ApiKeyword.getResponseKeyValue(errorResponse,"errors.category_id").contains("The selected category id is invalid."));
+        Assert.assertTrue(ApiKeyword.getResponseKeyValue(errorResponse, "errors.category_id").contains("The selected category id is invalid."));
 
     }
 
     @AfterMethod
     public void afterMethod() {
         if (bookId != 0) {
-          ApiKeyword.delete(ApiEndPoint.DELETE_BOOK_BY_ID.getPathString(bookId));
+            ApiKeyword.delete(ApiEndPoint.DELETE_BOOK_BY_ID.getPathString(bookId));
         }
     }
 }

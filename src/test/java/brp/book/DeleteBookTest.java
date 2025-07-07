@@ -1,14 +1,13 @@
-package brp.books;
+package brp.book;
 
 import brp.commons.ApiEndPoint;
 import brp.commons.ApiKeyword;
 import brp.commons.BaseTest;
-import brp.model.books.NewBookPOJO;
+import brp.model.book.NewBookPOJO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.restassured.response.Response;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 

@@ -1,6 +1,6 @@
-package brp.users;
+package brp;
 
-import brp.model.users.NewUserPOJO;
+import brp.model.user.NewUserPOJO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import brp.commons.BaseTest;

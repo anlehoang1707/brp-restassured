@@ -1,4 +1,4 @@
-package brp.users;
+package brp;
 
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;

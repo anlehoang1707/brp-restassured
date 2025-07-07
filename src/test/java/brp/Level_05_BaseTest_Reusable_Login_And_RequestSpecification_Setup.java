@@ -1,18 +1,20 @@
-package brp.users;
+package brp;
 
-import brp.commons.ApiKeyword;
-import brp.commons.BaseTest;
-import brp.model.users.NewUserPOJO;
+import brp.commons.GlobalConstants;
+import brp.model.user.NewUserPOJO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import brp.commons.BaseTest;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
-import org.testng.Assert;
-import org.testng.annotations.AfterClass;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-public class Level_07_Add_Log4J2 extends BaseTest {
+import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.equalTo;
+
+public class Level_05_BaseTest_Reusable_Login_And_RequestSpecification_Setup extends BaseTest {
     RequestSpecification request;
     String token;
     final String baseUri = "https://api.anhtester.com/api";
@@ -33,37 +35,38 @@ public class Level_07_Add_Log4J2 extends BaseTest {
 
     @Test
     public void TC_01_Verify_GET_Method() {
-        Response response = ApiKeyword.getNoAuth("/users");
-        Assert.assertEquals(ApiKeyword.getStatusCode(response), 200);
+        Response response = getPreSetupRequest(GlobalConstants.BASE_URI).when().get("/users");
+        response.then().statusCode(200);
+        response.then().body("response[1].firstName",equalTo("John"));
     }
 
     @Test
     public void TC_02_Verify_POST_Method() throws JsonProcessingException {
+
         ObjectMapper objectMapper = new ObjectMapper();
         String newUserBody = objectMapper.writeValueAsString(newUser);
 
-        Response response = ApiKeyword.post("/user", newUserBody);
-        Assert.assertEquals(response.statusCode(), 200);
+        Response response = getPreSetupRequest(GlobalConstants.BASE_URI,GlobalConstants.TOKEN).body(newUserBody).when().post("/user");
+
+        response.prettyPrint();
     }
 
     @Test
     public void TC_03_Verify_PUT_Method() {
-//        Map<String, String> headers = new HashMap<>();
-//        headers.put("Accepted","application/json");
-//        Response response = ApiKeyword.get("/users",headers);
 
     }
 
     @Test
     public void TC_04_Verify_DELETE_Method() {
-        Response response = ApiKeyword.getWithQuery("/user", "username", newUser.getUsername());
-        Assert.assertEquals(response.statusCode(), 200);
-        Assert.assertEquals(response.jsonPath().getString("message"), "Success");
+        Response response = getPreSetupRequest(GlobalConstants.BASE_URI,GlobalConstants.TOKEN).queryParam("username",newUser.getUsername()).when().delete("/user");
+        response.prettyPrint();
+        response.then().statusCode(200);
+        response.then().body("message",equalTo("Success"));
 
-//        response.then().body("message", equalTo("Success"));
+
     }
 
-    @AfterClass
+    @AfterMethod
     public void afterMethod() {
 
     }

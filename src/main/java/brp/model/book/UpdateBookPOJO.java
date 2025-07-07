@@ -1,9 +1,8 @@
-package brp.model.books;
+package brp.model.book;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.Builder;
 import lombok.Data;
 
 import java.io.File;

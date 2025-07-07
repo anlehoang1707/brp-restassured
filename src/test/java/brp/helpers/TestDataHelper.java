@@ -22,4 +22,9 @@ public class TestDataHelper{
         Response response = ApiKeyword.get(ApiEndPoint.GET_ALL_BOOKS.getPathString());
         return ApiKeyword.getResponseKeyValueInt(response,"response[0].id");
     }
+
+    public static int getValidImageId() {
+        Response response = ApiKeyword.get(ApiEndPoint.GET_ALL_IMAGES.getPathString());
+        return ApiKeyword.getResponseKeyValueInt(response,"response[0].id");
+    }
 }

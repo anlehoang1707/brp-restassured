@@ -9,6 +9,7 @@ import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import org.apache.commons.logging.Log;
 
+import java.io.File;
 import java.util.List;
 import java.util.Map;
 
@@ -19,7 +20,7 @@ public class ApiKeyword {
     @Step("GET request to {path}")
     public static Response get(String path) {
         Response response = given(SpecBuilder.getRequestSpecBuilder()).when().get(path).then().spec(SpecBuilder.getResponseSpecBuilder()).extract().response();
-        LogUtils.info("GET request to " + path);
+//        LogUtils.info("GET request to " + path);
         return response;
     }
     @Step("GET request to {0} with headers {1}")
@@ -33,7 +34,7 @@ public class ApiKeyword {
                         spec(SpecBuilder.getResponseSpecBuilder()).
                         extract().
                         response();
-        LogUtils.info("Response: " + response.prettyPrint());
+//        LogUtils.info("Response: " + response.prettyPrint());
         return response;
     }
 
@@ -48,7 +49,7 @@ public class ApiKeyword {
                         spec(SpecBuilder.getResponseSpecBuilder()).
                         extract().
                         response();
-        LogUtils.info("Response: " + response.prettyPrint());
+//        LogUtils.info("Response: " + response.prettyPrint());
         return response;
     }
 
@@ -67,14 +68,14 @@ public class ApiKeyword {
                         .spec(SpecBuilder.getResponseSpecBuilder())
                         .extract()
                         .response();
-        LogUtils.info("Response: " + response.prettyPrint());
+//        LogUtils.info("Response: " + response.prettyPrint());
         return response;
     }
 
     @Step("GET request to {0} without authentication")
     public static Response getNoAuth(String path) {
         Response response = given(SpecBuilder.getRequestSpecBuilderNoAuth()).when().get(path).then().spec(SpecBuilder.getResponseSpecBuilder()).extract().response();
-        LogUtils.info("GET request to " + path + " without authentication");
+//        LogUtils.info("GET request to " + path + " without authentication");
         return response;
     }
 
@@ -94,11 +95,19 @@ public class ApiKeyword {
         return response;
     }
 
+    @Step("POST request to {0} using form-data with body key {1} and value {2}")
+    public static Response post(String path, String bodyKey,File file) {
+        LogUtils.info("POST request to " + path + " without authentication with payload: ");
+        Response response = given(SpecBuilder.getRequestSpecBuilderNoAuth()).header("Content-Type", "multipart/form-data").multiPart(bodyKey,file).when().post(path).then().spec(SpecBuilder.getResponseSpecBuilder()).extract().response();
+//        LogUtils.info("Response: " + response.prettyPrint());
+        return response;
+    }
+
     @Step("PUT request to {0} with payload {1}")
     public static Response put(String path, Object payload) {
         LogUtils.info("PUT request to " + path + " with payload: " + payload);
         Response response = given(SpecBuilder.getRequestSpecBuilder()).body(payload).when().put(path).then().extract().response();
-        LogUtils.info("Response: " + response.prettyPrint());
+//        LogUtils.info("Response: " + response.prettyPrint());
         return response;
     }
 

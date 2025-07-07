@@ -1,4 +1,4 @@
-package brp.model.users;
+package brp.model.user;
 
 import lombok.Data;
 

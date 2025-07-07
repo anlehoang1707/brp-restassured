@@ -1,8 +1,8 @@
-package brp.users;
+package brp;
 
 import brp.commons.ApiKeyword;
 import brp.commons.BaseTest;
-import brp.model.users.NewUserPOJO;
+import brp.model.user.NewUserPOJO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.response.Response;
@@ -12,7 +12,7 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-public class Level_08_Add_Allure extends BaseTest {
+public class Level_07_Add_Log4J2 extends BaseTest {
     RequestSpecification request;
     String token;
     final String baseUri = "https://api.anhtester.com/api";
@@ -31,13 +31,13 @@ public class Level_08_Add_Allure extends BaseTest {
         newUser.setUserStatus(1);
     }
 
-//    @Test(description = "Verify GET Method")
+    @Test
     public void TC_01_Verify_GET_Method() {
         Response response = ApiKeyword.getNoAuth("/users");
         Assert.assertEquals(ApiKeyword.getStatusCode(response), 200);
     }
 
-    @Test(description = "Verify POST Method")
+    @Test
     public void TC_02_Verify_POST_Method() throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
         String newUserBody = objectMapper.writeValueAsString(newUser);
@@ -46,7 +46,7 @@ public class Level_08_Add_Allure extends BaseTest {
         Assert.assertEquals(response.statusCode(), 200);
     }
 
-    @Test(description = "Verify PUT Method")
+    @Test
     public void TC_03_Verify_PUT_Method() {
 //        Map<String, String> headers = new HashMap<>();
 //        headers.put("Accepted","application/json");
@@ -54,9 +54,9 @@ public class Level_08_Add_Allure extends BaseTest {
 
     }
 
-    @Test(description = "Verify DELETE Method")
+    @Test
     public void TC_04_Verify_DELETE_Method() {
-        Response response = ApiKeyword.deleteWithQuery("/user", "username", newUser.getUsername());
+        Response response = ApiKeyword.getWithQuery("/user", "username", newUser.getUsername());
         Assert.assertEquals(response.statusCode(), 200);
         Assert.assertEquals(response.jsonPath().getString("message"), "Success");
 
