@@ -18,6 +18,7 @@
             <class name="com.brp.book.UpdateBookTest"/>
             <class name="com.brp.book.GetBookTest"/>
 
+
 <!--            <class name="brp.image.CreateImageTest" />-->
 <!--            <class name="brp.image.DeleteImageTest" />-->
 <!--            <class name="brp.image.GetImageTest"/>-->
