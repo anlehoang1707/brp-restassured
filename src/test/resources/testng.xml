@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="brp-api-test-suite" parallel="classes" thread-count="12">
+
+    <listeners>
+        <listener class-name="listeners.LogListener"/>
+        <listener class-name="listeners.AllureListener"/>
+    </listeners>
+
+
+    <test name="User Management Tests">
+<!--        <packages>-->
+<!--            <package name="books"/>-->
+<!--        </packages>-->
+        <classes>
+            <class name="com.brp.book.CreateBookTest" />
+            <class name="com.brp.book.DeleteBookTest" />
+            <class name="com.brp.book.UpdateBookTest"/>
+            <class name="com.brp.book.GetBookTest"/>
+<!--            <class name="brp.image.CreateImageTest" />-->
+<!--            <class name="brp.image.DeleteImageTest" />-->
+<!--            <class name="brp.image.GetImageTest"/>-->
+<!--            <class name="brp.image.UpdateImageTest"/>-->
+            <class name="com.brp.category.CreateCategoryTest" />
+            <class name="com.brp.category.DeleteCategoryTest" />
+            <class name="com.brp.category.GetCategoryTest"/>
+            <class name="com.brp.category.UpdateCategoryTest"/>
+        </classes>
+    </test>
+
+</suite>
